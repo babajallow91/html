@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="captiveportal_logo1.ico" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <?php
+        require_once("globals.inc");
+        $request_uri = urldecode(str_replace("/index.php?zone={$_REQUEST['zone']}&redirurl=", "", $_SERVER["REQUEST_URI"]));
+        $portal_redirurl = urldecode("$PORTAL_REDIRURL$");
+        if(!stristr($portal_redirurl, $request_uri)) {
+          Header("Location: $PORTAL_REDIRURL$");
+          exit;  }
+    ?>
+
+
+
+
+        <title>Captive Portal Login Page</title>
+        <style>
+            #content,
+            .login,
+            .login-card a,
+            .login-card h1,
+            .login-help,
+            #error {
+                text-align: center
+            }
+            
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                display: table;
+            }
+            
+            .clock {
+                position: relative;
+                top: 30%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                color: #282828;
+                font-size: 30px;
+                border: 1px solid #ccc;
+                padding: 0px 5px 0px 5px;
+            }
+            
+            #content {
+                font-family: 'Arial', 'Source Sans Pro', sans-serif;
+                background: url(captiveportal-background.jpg) center center no-repeat fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+                display: table-cell;
+                vertical-align: middle
+            }
+            
+            .txt {
+                text-align: center;
+                animation: txt 5s ease-out infinite normal;
+                font-size: 5em
+            }
+            
+            @keyframes txt {
+                0% {
+                    transform: scale(0.9);
+                }
+                25% {
+                    transform: scale(2);
+                }
+                60% {
+                    transform: scale(0.9);
+                }
+                100% {
+                    transform: scale(0.9);
+                }
+            }
+            
+            .login-card {
+                padding: 40px;
+                width: 274px;
+                background-color: #F7F7F7;
+                margin: 0 auto 10px;
+                border-radius: 2px;
+                box-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+                overflow: hidden
+            }
+            
+            .login-card h1 {
+                font-weight: 400;
+                font-size: 2.3em;
+                color: #1383c6
+            }
+            
+            .login-card h1 span {
+                color: #f26721
+            }
+            
+            .login-card img {
+                width: 70%;
+                height: 70%
+            }
+            
+            .login-card input[type=submit] {
+                width: 100%;
+                display: block;
+                margin-bottom: 10px;
+                position: relative
+            }
+            
+            .login-card input[type=text],
+            input[type=password] {
+                height: 44px;
+                font-size: 16px;
+                width: 100%;
+                margin-bottom: 10px;
+                -webkit-appearance: none;
+                background: #fff;
+                border: 1px solid #d9d9d9;
+                border-top: 1px solid silver;
+                padding: 0 8px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box
+            }
+            
+            .login-card input[type=text]:hover,
+            input[type=password]:hover {
+                border: 1px solid #b9b9b9;
+                border-top: 1px solid #a0a0a0;
+                -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+                -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1)
+            }
+            
+            .login {
+                font-size: 14px;
+                font-family: Arial, sans-serif;
+                font-weight: 700;
+                height: 36px;
+                padding: 0 8px
+            }
+            
+            .login-submit {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                border: 0;
+                color: #fff;
+                text-shadow: 0 1px rgba(0, 0, 0, .1);
+                background-color: #ff9900
+            }
+            
+            .login-submit:disabled {
+                opacity: .6
+            }
+            
+            .login-submit:hover {
+                border: 0;
+                text-shadow: 0 1px rgba(0, 0, 0, .3);
+                background-color: #ffad33
+            }
+            
+            .login-card a {
+                text-decoration: none;
+                color: #222;
+                font-weight: 400;
+                display: inline-block;
+                opacity: .6;
+                transition: opacity ease .5s
+            }
+            
+            .login-card a:hover {
+                opacity: 1
+            }
+            
+            .login-help {
+                width: 100%;
+                font-size: 12px
+            }
+            
+            .list {
+                list-style-type: none;
+                padding: 0
+            }
+            
+            .list__item {
+                margin: 0 0 .7rem;
+                padding: 0
+            }
+            
+            label {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-align: center;
+                -webkit-align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
+                text-align: left;
+                font-size: 14px;
+            }
+            
+            @media screen and (max-width:450px) {
+                .login-card {
+                    width: 70% !important
+                }
+                .login-card img {
+                    width: 30%;
+                    height: 30%
+                }
+            }
+        </style>
+
+        <script>
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                // add a zero in front of numbers<10
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById("MyClockDisplay").innerHTML = h + ":" + m + ":" + s;
+                var t = setTimeout(function() {
+                    startTime()
+                }, 500);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+        </script>
+
+
+
+
+</head>
+
+<body background="captiveportal-bg.png" onload="startTime()">
+
+
+    <div id="content">
+        <div class="login-card">
+            <img src="captiveportal-logo1.png">
+            <br>
+            <br>
+
+            <div id="MyClockDisplay" class="clock"></div>
+
+            <div id="explanation-en">
+                <p style="color:black; font-size:15px;">
+                    For any Inquiries and code purchase Please call 3799673 / 2666614.</p>
+                <p style="color:black; font-size:12px;">
+                    <strong style="color:#ff0000">NOTE:</strong> Please enter code in small / lower case,
+                </p>
+
+                <!-- Click-thru to our website - make sure the hostname is added to Allowed Hostnames in CP -->
+
+                <div id="loginbox">
+                    <form method="post" action="$PORTAL_ACTION$">
+                        <!-- Placeholder for optional username/password authentication here -->
+                        <!-- Voucher authentication here -->
+                        <label for="auth_voucher">
+                            <p id="login-page" style="color:orange;font-size:20px;text-align: center;">Enter your voucher code here</p>
+                        </label>
+
+
+                        <input name="auth_voucher" id="auth_voucher" type="text" style="border:1px dashed;" size="22" autofocus="" placeholder="Enter Voucher Code Here">
+                        <input name="redirurl" type="hidden" value="captiveportal-Success.html">
+                        <input name="zone" type="hidden" value="$PORTAL_ZONE$">
+
+                        <input name="accept" type="submit" value="OK" class="login-submit">
+                    </form>
+                    <p style="color:black; font-size:15px;">
+                        ------&nbsp; &nbsp;Alieu Shop WIFI&nbsp; &nbsp;------</p>
+
+                    <p class="txt" style="color:#0080ff; font-size:13px;">
+                        Welcome&nbsp;WE&nbsp;&#9829;&nbsp; YOU!!!.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
